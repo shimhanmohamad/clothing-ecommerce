@@ -55,12 +55,11 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
-// Generate order ID before saving
-orderSchema.pre('save', function(next) {
+// FIXED: Generate order ID before saving - removed next parameter
+orderSchema.pre('save', function() {
   if (!this.orderId) {
     this.orderId = 'ORD' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase();
   }
-  next();
 });
 
 module.exports = mongoose.model('Order', orderSchema);
