@@ -8,6 +8,11 @@ const Header = () => {
   const { getCartItemsCount } = useCart();
   const navigate = useNavigate();
 
+  // Debug logs
+  console.log('Header - isAuthenticated:', isAuthenticated);
+  console.log('Header - user:', user);
+  console.log('Header - user name:', user?.name);
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -38,13 +43,16 @@ const Header = () => {
                   Orders
                 </Link>
                 <div className="flex items-center space-x-4">
-                  <span className="text-gray-700">Hello, {user?.name}</span>
+                  
                   <button
                     onClick={handleLogout}
                     className="text-gray-700 hover:text-primary-600 font-medium transition-colors"
                   >
                     Logout
                   </button>
+                  <span className="text-gray-700">
+                    Hello, {user?.name}
+                  </span>
                 </div>
               </>
             ) : (

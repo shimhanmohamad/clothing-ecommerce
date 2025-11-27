@@ -5,7 +5,7 @@ const Product = require('../models/Product');
 
 const router = express.Router();
 
-// Get cart
+// Get cart (works for both authenticated and guest users)
 router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).populate('cart.product');
@@ -16,7 +16,7 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-// Add to cart
+// Add to cart (works for both authenticated and guest users)
 router.post('/', auth, async (req, res) => {
   try {
     const { productId, size, quantity = 1 } = req.body;
@@ -56,7 +56,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// Update cart item
+// Update cart item quantity
 router.put('/:itemId', auth, async (req, res) => {
   try {
     const { quantity } = req.body;

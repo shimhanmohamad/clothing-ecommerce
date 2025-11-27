@@ -47,15 +47,24 @@ export const CartProvider = ({ children }) => {
     localStorageService.setGuestCart(cart);
   };
 
+  // Add to cart - works for both logged in and guest users
   const addToCart = async (product, size, quantity = 1) => {
     try {
       if (isAuthenticated) {
+        // User is logged in - save to database
         await cartService.addToCart(product._id, size, quantity);
         await loadUserCart();
       } else {
+        // Guest user - save to localStorage
         const newItem = {
           _id: Date.now().toString(),
-          product,
+          product: {
+            _id: product._id,
+            name: product.name,
+            price: product.price,
+            imageUrl: product.imageUrl,
+            category: product.category
+          },
           size,
           quantity,
         };
@@ -78,6 +87,7 @@ export const CartProvider = ({ children }) => {
       
       return { success: true };
     } catch (error) {
+      console.error('Error adding to cart:', error);
       return { 
         success: false, 
         message: error.response?.data?.message || 'Failed to add to cart' 
@@ -142,6 +152,24 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // Merge guest cart with user cart when user logs in
+  const mergeGuestCart = async () => {
+    if (isAuthenticated) {
+      const guestCart = localStorageService.getGuestCart();
+      if (guestCart.length > 0) {
+        try {
+          for (const item of guestCart) {
+            await cartService.addToCart(item.product._id, item.size, item.quantity);
+          }
+          localStorageService.clearGuestCart();
+          await loadUserCart();
+        } catch (error) {
+          console.error('Error merging cart:', error);
+        }
+      }
+    }
+  };
+
   const getCartTotal = () => {
     return cartItems.reduce((total, item) => {
       return total + (item.product.price * item.quantity);
@@ -161,6 +189,7 @@ export const CartProvider = ({ children }) => {
     clearCart,
     getCartTotal,
     getCartItemsCount,
+    mergeGuestCart,
     refreshCart: isAuthenticated ? loadUserCart : loadGuestCart
   };
 
