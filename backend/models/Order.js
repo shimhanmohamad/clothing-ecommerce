@@ -55,8 +55,10 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
-// FIXED: Generate order ID before saving - removed next parameter
-orderSchema.pre('save', function() {
+// Ensure orderId is generated before validation so `required: true` passes
+// Use a synchronous pre-validate hook (no `next` callback) so Mongoose
+// will treat it as synchronous and not expect a callback.
+orderSchema.pre('validate', function() {
   if (!this.orderId) {
     this.orderId = 'ORD' + Date.now() + Math.random().toString(36).substr(2, 5).toUpperCase();
   }

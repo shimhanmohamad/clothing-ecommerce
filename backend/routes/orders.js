@@ -22,22 +22,35 @@ router.post('/', auth, async (req, res) => {
     const { shippingAddress } = req.body;
     const user = await User.findById(req.user._id).populate('cart.product');
 
-    if (user.cart.length === 0) {
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!Array.isArray(user.cart) || user.cart.length === 0) {
       return res.status(400).json({ message: 'Cart is empty' });
+    }
+
+    // Ensure all cart products still exist (populated). If any product was removed,
+    // return a clear error instead of throwing when accessing properties.
+    const missing = user.cart.filter(item => !item.product);
+    if (missing.length > 0) {
+      return res.status(400).json({ message: 'Some items in the cart are no longer available', missingCount: missing.length });
     }
 
     // Calculate total and prepare order items
     let totalAmount = 0;
     const orderItems = user.cart.map(item => {
-      const itemTotal = item.product.price * item.quantity;
+      // At this point item.product should exist due to the earlier check.
+      const price = item.product.price || 0;
+      const itemTotal = price * item.quantity;
       totalAmount += itemTotal;
 
       return {
         product: item.product._id,
-        name: item.product.name,
+        name: item.product.name || 'Unknown product',
         size: item.size,
         quantity: item.quantity,
-        price: item.product.price
+        price
       };
     });
 
