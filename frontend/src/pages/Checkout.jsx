@@ -47,7 +47,7 @@ const Checkout = () => {
         }))
       };
 
-      const order = await ordersService.createOrder(orderData);
+      await ordersService.createOrder(orderData);
       await clearCart();
       
       toast.success('Order placed successfully!');
@@ -61,156 +61,173 @@ const Checkout = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h1>
-            <button
-              onClick={() => navigate('/products')}
-              className="btn-primary"
-            >
-              Continue Shopping
-            </button>
-          </div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <h1 className="text-2xl font-semibold text-gray-800 mb-4">
+            Your cart is empty
+          </h1>
+          <button
+            onClick={() => navigate('/products')}
+            className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition"
+          >
+            Continue Shopping
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+    <div className="min-h-screen bg-gray-50 py-10">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-10">
+          Checkout
+        </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Shipping Information */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Shipping Information</h2>
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="form-label">Full Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={shippingAddress.name}
-                  onChange={handleInputChange}
-                  required
-                  className="input-field"
-                  placeholder="Enter your full name"
-                />
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          
+          {/* LEFT SIDE — Shipping Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                Shipping Information
+              </h2>
 
-              <div>
-                <label className="form-label">Address</label>
-                <input
-                  type="text"
-                  name="address"
-                  value={shippingAddress.address}
-                  onChange={handleInputChange}
-                  required
-                  className="input-field"
-                  placeholder="Enter your address"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label className="form-label">City</label>
+                  <label className="text-sm font-medium text-gray-700">Full Name</label>
                   <input
                     type="text"
-                    name="city"
-                    value={shippingAddress.city}
+                    name="name"
+                    value={shippingAddress.name}
                     onChange={handleInputChange}
                     required
-                    className="input-field"
-                    placeholder="Enter your city"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black"
+                    placeholder="John Doe"
                   />
                 </div>
 
                 <div>
-                  <label className="form-label">Postal Code</label>
+                  <label className="text-sm font-medium text-gray-700">Address</label>
                   <input
                     type="text"
-                    name="postalCode"
-                    value={shippingAddress.postalCode}
+                    name="address"
+                    value={shippingAddress.address}
                     onChange={handleInputChange}
                     required
-                    className="input-field"
-                    placeholder="Enter postal code"
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black"
+                    placeholder="123 Main Street"
                   />
                 </div>
-              </div>
 
-              <div>
-                <label className="form-label">Country</label>
-                <input
-                  type="text"
-                  name="country"
-                  value={shippingAddress.country}
-                  onChange={handleInputChange}
-                  required
-                  className="input-field"
-                  placeholder="Enter your country"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full btn-primary disabled:opacity-50"
-              >
-                {loading ? 'Placing Order...' : 'Place Order'}
-              </button>
-            </form>
-          </div>
-
-          {/* Order Summary */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
-            
-            <div className="space-y-4 mb-6">
-              {cartItems.map((item) => (
-                <div key={item._id} className="flex items-center justify-between border-b pb-4">
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={item.product.imageUrl}
-                      alt={item.product.name}
-                      className="w-16 h-16 object-cover rounded"
+                <div className="grid grid-cols-2 gap-5">
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">City</label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={shippingAddress.city}
+                      onChange={handleInputChange}
+                      required
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black"
+                      placeholder="Colombo"
                     />
-                    <div>
-                      <h3 className="font-medium text-gray-900">{item.product.name}</h3>
-                      <p className="text-sm text-gray-600">Size: {item.size}</p>
-                      <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-                    </div>
                   </div>
-                  <p className="font-medium text-gray-900">
-                    {formatPrice(item.product.price * item.quantity)}
-                  </p>
-                </div>
-              ))}
-            </div>
 
-            <div className="space-y-2 border-t pt-4">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
-                <span className="font-medium">{formatPrice(subtotal)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Shipping</span>
-                <span className="font-medium">{formatPrice(shipping)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Tax</span>
-                <span className="font-medium">{formatPrice(tax)}</span>
-              </div>
-              <div className="flex justify-between text-lg font-bold border-t pt-2">
-                <span>Total</span>
-                <span className="text-primary-600">{formatPrice(total)}</span>
-              </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-700">Postal Code</label>
+                    <input
+                      type="text"
+                      name="postalCode"
+                      value={shippingAddress.postalCode}
+                      onChange={handleInputChange}
+                      required
+                      className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black"
+                      placeholder="10100"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Country</label>
+                  <input
+                    type="text"
+                    name="country"
+                    value={shippingAddress.country}
+                    onChange={handleInputChange}
+                    required
+                    className="mt-1 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-black focus:border-black"
+                    placeholder="Sri Lanka"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-black text-white py-4 rounded-lg text-lg font-semibold hover:bg-gray-800 transition disabled:opacity-50"
+                >
+                  {loading ? 'Placing Order...' : 'Place Order'}
+                </button>
+
+              </form>
             </div>
           </div>
+
+          {/* RIGHT SIDE — Sticky Order Summary */}
+          <div>
+            <div className="bg-white rounded-2xl shadow-sm p-8 border border-gray-100 sticky top-10">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                Order Summary
+              </h2>
+
+              <div className="space-y-4 mb-6">
+                {cartItems.map(item => (
+                  <div key={item._id} className="flex justify-between items-center pb-4 border-b">
+                    <div className="flex items-center space-x-4">
+                      <img
+                        src={item.product.imageUrl}
+                        alt={item.product.name}
+                        className="w-16 h-16 rounded-lg object-cover"
+                      />
+                      <div>
+                        <p className="font-medium text-gray-900">{item.product.name}</p>
+                        <p className="text-sm text-gray-600">Size: {item.size}</p>
+                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                      </div>
+                    </div>
+
+                    <p className="font-semibold">
+                      {formatPrice(item.product.price * item.quantity)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-3 border-t pt-4">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Subtotal</span>
+                  <span className="font-medium">{formatPrice(subtotal)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Shipping</span>
+                  <span className="font-medium">{formatPrice(shipping)}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Tax</span>
+                  <span className="font-medium">{formatPrice(tax)}</span>
+                </div>
+
+                <div className="flex justify-between text-xl font-bold pt-3 border-t">
+                  <span>Total</span>
+                  <span className="text-black">{formatPrice(total)}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
+
       </div>
     </div>
   );

@@ -55,7 +55,6 @@ router.post('/', auth, async (req, res) => {
     // Clear user's cart
     user.cart = [];
     await user.save();
-
     // Send confirmation email
     try {
       await sendOrderConfirmationEmail(order, user);

@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL =  import.meta.envREACT_APP_API_URL || 'http://localhost:5000/api';
+// In Vite projects env vars should be prefixed with VITE_ and accessed
+// via `import.meta.env.VITE_*`. Provide a safe fallback to localhost.
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

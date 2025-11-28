@@ -4,7 +4,7 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { formatPrice } from '../../utils/helpers';
 
-const CartSummary = () => {
+const   CartSummary = () => {
   const { cartItems, getCartTotal, clearCart } = useCart();
   const { isAuthenticated } = useAuth();
 

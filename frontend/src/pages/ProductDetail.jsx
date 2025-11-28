@@ -160,7 +160,7 @@ const ProductDetail = () => {
               <button
                 onClick={handleAddToCart}
                 disabled={!selectedSize}
-                className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-black hover:bg-gray-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Add to Cart
               </button>
