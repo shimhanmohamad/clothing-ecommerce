@@ -70,7 +70,9 @@ step 7 -  cd Frontend
 step 8 -  Install node packages.Simple enter npm install.then all packages are installed according to package.json file.
           if some packages are not installed then you can install using the error messages.
 
-step 9 -add the .env file in the root directory.
+step 9 -  add the .env file in the root directory.
+
+step 10 - run "npm run dev" in both frontend and backend
 
 
 
