@@ -54,12 +54,15 @@ A full-stack MERN e-commerce application for a clothing brand with user authenti
 ####  After Clone the Clothing-Ecommerce Repository  ###
 Step 1 -  Open the Clothing-Ecommerce in the Code Editor (VS Code prefered)
 Step 2 -  cd Backend
-Step 3 - Install node packages.Simple enter npm install.then all packages are installed according to package.json file.
+Step 3 -  Install node packages.Simple enter npm install.then all packages are installed according to package.json file.
+          if some packages are not installed then you can install using the error messages.
+step 5 -  add the .env file in the root directory and create own jwt secrete key and own mongodb configurations and stripe also.
+step 6 - Open another terminal
+step 7 - cd Frontend
+step 8 - Install node packages.Simple enter npm install.then all packages are installed according to package.json file.
          if some packages are not installed then you can install using the error messages.
-step 4 - Open another terminal
-step 5 - cd Frontend
-step 5 - Install node packages.Simple enter npm install.then all packages are installed according to package.json file.
-         if some packages are not installed then you can install using the error messages.
+step 9 -add the .env file in the root directory.
+
 
 
 ### .env Frontend ###
@@ -73,7 +76,7 @@ STRIPE_SECRET_KEY=sk_test_51S5PkcEnC4L5QwU68nfz5jIkTCsBIzQPfd7krY7XqjjHEIIlYYWvR
 NODE_ENV=development
 
 # MongoDB Configuration
-MONGODB_URI=mongodb+srv://shimhan:shim1234@cluster0.jdcirbl.mongodb.net/clothing_ecommerce?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://shimhan:shim1234@cluster0.jdcirbl.mongodb.net/clothing_ecommerce?retryWrites=true&w=majority  
 
 # JWT Configuration
 JWT_SECRET=242dc61dd18e9bcade1f4f4e14506fb2d03b38a150c2fe3c722710559e52a81d
