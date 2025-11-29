@@ -1,9 +1,12 @@
 import React from 'react';
-import { productsService } from '../../services/products';
 
 const ProductFilters = ({ filters, onFilterChange, categories }) => {
   const handleFilterChange = (key, value) => {
-    onFilterChange({ [key]: value, page: 1 });
+    onFilterChange({
+      ...filters,
+      [key]: value,
+      page: 1
+    });
   };
 
   const clearFilters = () => {
@@ -47,12 +50,12 @@ const ProductFilters = ({ filters, onFilterChange, categories }) => {
           placeholder="Search products..."
           value={filters.search}
           onChange={(e) => handleFilterChange('search', e.target.value)}
-          className="input-field"
+          className="input-field w-60 mt-2 h-8 bg-white border-gray-300 text-sm rounded-lg"
         />
       </div>
 
       {/* Category */}
-      <div className="mb-6">
+      <div className="mb-6 flex flex-col gap-3">
         <label className="form-label">Category</label>
         <select
           value={filters.category}
@@ -75,10 +78,15 @@ const ProductFilters = ({ filters, onFilterChange, categories }) => {
           {sizes.map((size) => (
             <button
               key={size}
-              onClick={() => handleFilterChange('size', filters.size === size ? '' : size)}
-              className={`py-2 px-3 text-sm font-medium rounded-lg border transition-colors ${
+              onClick={() =>
+                handleFilterChange(
+                  'size',
+                  filters.size === size ? '' : size
+                )
+              }
+              className={`py-2 px-3 text-sm font-medium rounded-lg border transition ${
                 filters.size === size
-                  ? 'bg-primary-500 text-white border-primary-500'
+                  ? 'bg-primary-500 text-black border-primary-500'
                   : 'bg-white text-gray-700 border-gray-300 hover:border-primary-500'
               }`}
             >
@@ -95,10 +103,18 @@ const ProductFilters = ({ filters, onFilterChange, categories }) => {
           {priceRanges.map((range) => (
             <button
               key={range.label}
-              onClick={() => handleFilterChange('minPrice', range.min)}
-              className={`block w-full text-left py-2 px-3 text-sm rounded-lg border transition-colors ${
-                filters.minPrice == range.min
-                  ? 'bg-primary-500 text-white border-primary-500'
+              onClick={() =>
+                onFilterChange({
+                  ...filters,
+                  minPrice: range.min,
+                  maxPrice: range.max,
+                  page: 1
+                })
+              }
+              className={`block w-full text-left py-2 px-3 text-sm rounded-lg border transition ${
+                Number(filters.minPrice) === range.min &&
+                Number(filters.maxPrice) === range.max
+                  ? 'bg-primary-500 text-black border-primary-500'
                   : 'bg-white text-gray-700 border-gray-300 hover:border-primary-500'
               }`}
             >
@@ -116,7 +132,13 @@ const ProductFilters = ({ filters, onFilterChange, categories }) => {
             type="number"
             placeholder="0"
             value={filters.minPrice}
-            onChange={(e) => handleFilterChange('minPrice', e.target.value)}
+            onChange={(e) =>
+              onFilterChange({
+                ...filters,
+                minPrice: e.target.value,
+                page: 1
+              })
+            }
             className="input-field text-sm"
           />
         </div>
@@ -126,7 +148,13 @@ const ProductFilters = ({ filters, onFilterChange, categories }) => {
             type="number"
             placeholder="1000"
             value={filters.maxPrice}
-            onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
+            onChange={(e) =>
+              onFilterChange({
+                ...filters,
+                maxPrice: e.target.value,
+                page: 1
+              })
+            }
             className="input-field text-sm"
           />
         </div>

@@ -1,5 +1,31 @@
-// services/auth.js
 import api from './api';
+
+// Request interceptor to add token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor to handle token expiration
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem('auth_token');
+      window.dispatchEvent(new Event('storage'));
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const authService = {
   login: async (email, password) => {
@@ -19,6 +45,14 @@ export const authService = {
 
   updateProfile: async (userData) => {
     const response = await api.put('/auth/profile', userData);
+    return response.data;
+  },
+
+  changePassword: async (currentPassword, newPassword) => {
+    const response = await api.put('/auth/change-password', { 
+      currentPassword, 
+      newPassword 
+    });
     return response.data;
   }
 };

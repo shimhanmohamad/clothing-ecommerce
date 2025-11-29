@@ -1,6 +1,6 @@
 // src/App.jsx
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import ProtectedRoute from "./components/common/ProtectedRoute"; // New component
 
 // Pages
 import Home from "./pages/Home";
@@ -20,70 +21,114 @@ import Orders from "./pages/Orders";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound"; // Add 404 page
 
 // Hooks
 import { useAuth } from "./context/AuthContext";
 
 function App() {
   const { loading, isAuthenticated } = useAuth();
+  const location = useLocation();
 
+  // Show loading spinner while checking authentication
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <LoadingSpinner size="large" />
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="App min-h-screen flex flex-col">
+    <div className="App min-h-screen flex flex-col bg-gray-50">
       <Header />
       <main className="flex-grow">
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          
+          {/* Auth Routes - Redirect if already authenticated */}
+          <Route 
+            path="/login" 
+            element={
+              !isAuthenticated ? (
+                <Login /> 
+              ) : (
+                <Navigate to={location.state?.from || "/"} replace />
+              )
+            } 
+          />
+          <Route 
+            path="/register" 
+            element={
+              !isAuthenticated ? (
+                <Register /> 
+              ) : (
+                <Navigate to={location.state?.from || "/"} replace />
+              )
+            } 
+          />
+          
+          {/* Protected Routes */}
           <Route
             path="/checkout"
-            element={isAuthenticated ? <Checkout /> : <Navigate to="/login" />}
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            }
           />
-          {/* Dedicated success page */}
           <Route
             path="/checkout/success"
             element={
-              isAuthenticated ? <CheckoutSuccess /> : <Navigate to="/login" />
+              <ProtectedRoute>
+                <CheckoutSuccess />
+              </ProtectedRoute>
             }
           />
           <Route
             path="/orders"
-            element={isAuthenticated ? <Orders /> : <Navigate to="/login" />}
+            element={
+              <ProtectedRoute>
+                <Orders />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/profile"
-            element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
           />
-          <Route
-            path="/login"
-            element={!isAuthenticated ? <Login /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/register"
-            element={!isAuthenticated ? <Register /> : <Navigate to="/" />}
-          />
+          
+          {/* Fallback routes */}
+          <Route path="/home" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
+      
+      {/* Toast Configuration */}
       <ToastContainer
         position="top-right"
-        autoClose={3000}
+        autoClose={5000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        theme="light"
+        style={{ marginTop: '60px' }} // Prevent header overlap
       />
     </div>
   );

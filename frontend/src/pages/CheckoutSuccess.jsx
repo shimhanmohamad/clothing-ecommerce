@@ -1,5 +1,5 @@
-// src/pages/CheckoutSuccess.jsx
-import React, { useEffect, useState } from "react";
+// Updated CheckoutSuccess.jsx - Fixed retry logic
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { paymentService } from "../services/payment";
 import { useCart } from "../context/CartContext";
@@ -9,13 +9,17 @@ import { toast } from "react-toastify";
 const CheckoutSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { clearCart, cartItems } = useCart();
+  const { clearCart } = useCart();
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState(null);
-  const [retryCount, setRetryCount] = useState(0);
+  const hasProcessed = useRef(false);
 
   useEffect(() => {
+    // Prevent multiple executions
+    if (hasProcessed.current) return;
+    hasProcessed.current = true;
+
     const processPayment = async () => {
       const sessionId = new URLSearchParams(location.search).get("session_id");
       
@@ -26,56 +30,34 @@ const CheckoutSuccess = () => {
       }
 
       try {
-        console.log("🔄 Starting payment verification for session:", sessionId);
+        console.log("🔄 Processing payment completion for session:", sessionId);
         
-        // Try to get payment status first
-        try {
-          const paymentStatus = await paymentService.getPaymentStatus(sessionId);
-          console.log("✅ Payment status:", paymentStatus);
-          
-          if (paymentStatus.status === 'paid') {
-            // Payment already processed
-            await handleSuccess(paymentStatus.order);
-            return;
-          }
-        } catch (statusError) {
-          console.warn("⚠️ Could not get payment status, proceeding with completion:", statusError.message);
-          // Continue with completion flow
-        }
-
-        // Complete checkout
-        console.log("🔄 Completing checkout...");
+        // Complete checkout in one call
         const result = await paymentService.completeCheckout(sessionId);
-        console.log("✅ Checkout completed:", result);
+        console.log("✅ Checkout completed successfully:", result);
         
-        await handleSuccess(result.order);
+        // Clear cart on frontend
+        clearCart();
+        setOrder(result.order);
+        setLoading(false);
+        
+        toast.success("🎉 Payment successful! Your order has been placed.");
         
       } catch (err) {
         console.error("❌ Checkout completion error:", err);
         
-        // Retry logic for network errors
-        if (err.message.includes('Network') && retryCount < 3) {
-          const newRetryCount = retryCount + 1;
-          setRetryCount(newRetryCount);
-          toast.warning(`Retrying... Attempt ${newRetryCount}/3`);
-          
-          setTimeout(() => {
-            processPayment();
-          }, 2000 * newRetryCount);
-          return;
-        }
-
         const errorMessage = err?.response?.data?.message || 
                            err?.message || 
                            "Payment verification failed. Please check your orders page.";
         
-        toast.error(errorMessage);
-        
-        // If we have an order but there was an error in the process
-        if (err?.response?.data?.order) {
-          await handleSuccess(err.response.data.order);
+        if (err.response?.status === 409 || err.response?.data?.order) {
+          // Order already exists or was created
+          clearCart();
+          setOrder(err.response.data.order);
+          setLoading(false);
+          toast.success("🎉 Payment successful! Your order has been placed.");
         } else {
-          // Redirect to orders page anyway - payment might have succeeded
+          toast.error(errorMessage);
           setTimeout(() => {
             navigate("/orders");
           }, 3000);
@@ -83,39 +65,16 @@ const CheckoutSuccess = () => {
       }
     };
 
-    const handleSuccess = async (orderData) => {
-      try {
-        // Clear cart only if we have items
-        if (cartItems.length > 0) {
-          clearCart();
-        }
-        
-        setOrder(orderData);
-        setLoading(false);
-        
-        toast.success("🎉 Payment successful! Your order has been placed.");
-        
-      } catch (clearError) {
-        console.warn("⚠️ Could not clear cart:", clearError);
-        // Continue anyway - order was created
-        setOrder(orderData);
-        setLoading(false);
-        toast.success("🎉 Payment successful! Your order has been placed.");
-      }
-    };
-
     processPayment();
-  }, [location.search, navigate, clearCart, retryCount, cartItems]);
+  }, [location.search, navigate, clearCart]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
-          <p className="text-lg font-medium text-gray-700">Processing your payment...</p>
-          <p className="text-sm text-gray-500 mt-2">
-            {retryCount > 0 ? `Retrying... (${retryCount}/3)` : 'Please wait...'}
-          </p>
+          <p className="text-lg font-medium text-gray-700">Finalizing your order...</p>
+          <p className="text-sm text-gray-500 mt-2">Please wait while we process your payment</p>
         </div>
       </div>
     );
@@ -135,7 +94,7 @@ const CheckoutSuccess = () => {
           </h1>
           <p className="text-gray-600 mb-6">
             Thank you for your order{user?.name && `, ${user.name}`}. 
-            {user?.email && ` A confirmation has been sent to ${user.email}.`}
+            A confirmation email has been sent to {user?.email}.
           </p>
         </div>
 
@@ -143,10 +102,10 @@ const CheckoutSuccess = () => {
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
             <h3 className="font-semibold text-gray-900 mb-2">Order Details</h3>
             <p className="text-sm text-gray-600">
-              Order #: <span className="font-mono">{order._id?.slice(-8) || 'N/A'}</span>
+              Order #: <span className="font-mono">{order._id?.slice(-8)}</span>
             </p>
             <p className="text-sm text-gray-600">
-              Total: ${order.totalAmount?.toFixed(2) || '0.00'}
+              Total: ${order.totalAmount?.toFixed(2)}
             </p>
             <p className="text-sm text-gray-600 mt-2">
               Status: <span className="text-green-600 font-medium">Confirmed</span>

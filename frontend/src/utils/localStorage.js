@@ -1,13 +1,37 @@
+const TOKEN_KEY = 'auth_token';
+
 export const localStorageService = {
-  // Token management
   setToken: (token) => {
-    localStorage.setItem('token', token);
+    try {
+      localStorage.setItem(TOKEN_KEY, token);
+    } catch (error) {
+      console.error('❌ Failed to save token to localStorage:', error);
+    }
   },
+
   getToken: () => {
-    return localStorage.getItem('token');
+    try {
+      return localStorage.getItem(TOKEN_KEY);
+    } catch (error) {
+      console.error('❌ Failed to get token from localStorage:', error);
+      return null;
+    }
   },
+
   removeToken: () => {
-    localStorage.removeItem('token');
+    try {
+      localStorage.removeItem(TOKEN_KEY);
+    } catch (error) {
+      console.error('❌ Failed to remove token from localStorage:', error);
+    }
+  },
+
+  clear: () => {
+    try {
+      localStorage.clear();
+    } catch (error) {
+      console.error('❌ Failed to clear localStorage:', error);
+    }
   },
 
   // Guest cart management

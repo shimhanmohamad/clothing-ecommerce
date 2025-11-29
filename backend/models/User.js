@@ -38,7 +38,8 @@ const userSchema = new mongoose.Schema({
     }
   }]
 }, {
-  timestamps: true
+  timestamps: true,
+    optimisticConcurrency: true // This helps with version control
 });
 
 // FIXED: Hash password before saving - removed next parameter
