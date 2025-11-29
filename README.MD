@@ -76,18 +76,18 @@ step 9 -add the .env file in the root directory.
 
 ### .env Frontend ###
 VITE_API_URL=http://localhost:5000/api
-VITE_STRIPE_PUBLIC_KEY=pk_test_51S5PkcEnC4L5QwU6rkUoyvBqOCzWYx8CRSEs95nde1jOZ2XxaAPYQ62riaEB0X1PrjJpBzh8EOdTMk8H9wz4ISwY00iK4x8E1W
-STRIPE_SECRET_KEY=sk_test_51S5PkcEnC4L5QwU68nfz5jIkTCsBIzQPfd7krY7XqjjHEIIlYYWvRwDsnSXsuNF1LRkas5DzmNsqKAxzMeBpKGeg000GjUCSGO
+VITE_STRIPE_PUBLIC_KEY=pk_test_add_your_public_key
+STRIPE_SECRET_KEY=sk_test_addd_your_public_key
 
 ### .env Backend ###
 
 NODE_ENV=development
 
 
-MONGODB_URI=mongodb+srv://shimhan:shim1234@cluster0.jdcirbl.mongodb.net/clothing_ecommerce?retryWrites=true&w=majority  
+MONGODB_URI=mongodb+srv://addyour:addyour1234@add#your#mongodb#configuration  
 
 
-JWT_SECRET=242dc61dd18e9bcade1f4f4e14506fb2d03b38a150c2fe3c722710559e52a81d
+JWT_SECRET=add_your_secrete_key
 JWT_EXPIRES_IN=15m
 
 EMAIL_SERVICE=gmail
@@ -95,8 +95,6 @@ SMTP_USER=addyourgmail@gmail.com
 SMTP_PASS=addy ourp assw ords  
 SMTP_PORT=587
 
-# Server Configuration
 PORT=5000
 
 
-STRIPE_SECRET_KEY=sk_test_51S5PkcEnC4L5QwU68nfz5jIkTCsBIzQPfd7krY7XqjjHEIIlYYWvRwDsnSXsuNF1LRkas5DzmNsqKAxzMeBpKGeg000GjUCSGO
