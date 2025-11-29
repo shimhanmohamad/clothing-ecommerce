@@ -78,7 +78,9 @@ step 10 - run "npm run dev" in both frontend and backend
 
 ### .env Frontend ###
 VITE_API_URL=http://localhost:5000/api
+
 VITE_STRIPE_PUBLIC_KEY=pk_test_add_your_public_key
+
 STRIPE_SECRET_KEY=sk_test_addd_your_public_key
 
 ### .env Backend ###
@@ -98,7 +100,7 @@ EMAIL_SERVICE=gmail
 SMTP_USER=addyourgmail@gmail.com
 
 SMTP_PASS=addy ourp assw ords
-  
+
 SMTP_PORT=587
 
 PORT=5000
