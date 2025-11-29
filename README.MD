@@ -90,11 +90,15 @@ MONGODB_URI=mongodb+srv://addyour:addyour1234@add#your#mongodb#configuration
 
 
 JWT_SECRET=add_your_secrete_key
+
 JWT_EXPIRES_IN=15m
 
 EMAIL_SERVICE=gmail
+
 SMTP_USER=addyourgmail@gmail.com
-SMTP_PASS=addy ourp assw ords  
+
+SMTP_PASS=addy ourp assw ords
+  
 SMTP_PORT=587
 
 PORT=5000
