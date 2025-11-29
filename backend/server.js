@@ -33,6 +33,8 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/orders', require('./routes/orders'));
+app.use('/api/payments', require('./routes/payment'));
+
 
 // Health check route
 app.get('/api/health', (req, res) => {
@@ -54,7 +56,8 @@ app.get('/', (req, res) => {
       auth: '/api/auth',
       products: '/api/products',
       cart: '/api/cart',
-      orders: '/api/orders'
+      orders: '/api/orders',
+      payments:'/api/payments'
     }
   });
 });

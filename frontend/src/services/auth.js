@@ -1,45 +1,24 @@
+// services/auth.js
 import api from './api';
 
 export const authService = {
-  /**
-   * Login user with email and password
-   */
-  login: (email, password) => 
-    api.post('/auth/login', { email, password }).then(res => res.data),
+  login: async (email, password) => {
+    const response = await api.post('/auth/login', { email, password });
+    return response.data;
+  },
 
-  /**
-   * Register new user
-   */
-  register: (name, email, password) => 
-    api.post('/auth/register', { name, email, password }).then(res => res.data),
+  register: async (name, email, password) => {
+    const response = await api.post('/auth/register', { name, email, password });
+    return response.data;
+  },
 
-  /**
-   * Get current user profile
-   */
-  getCurrentUser: () => 
-    api.get('/auth/me').then(res => res.data),
+  getCurrentUser: async () => {
+    const response = await api.get('/auth/me');
+    return response.data;
+  },
 
-  /**
-   * Update user profile
-   */
-  updateProfile: (userData) => 
-    api.put('/auth/profile', userData).then(res => res.data),
-
-  /**
-   * Change password
-   */
-  changePassword: (currentPassword, newPassword) => 
-    api.put('/auth/change-password', { currentPassword, newPassword }).then(res => res.data),
-
-  /**
-   * Request password reset
-   */
-  forgotPassword: (email) => 
-    api.post('/auth/forgot-password', { email }).then(res => res.data),
-
-  /**
-   * Reset password with token
-   */
-  resetPassword: (token, newPassword) => 
-    api.post('/auth/reset-password', { token, newPassword }).then(res => res.data)
+  updateProfile: async (userData) => {
+    const response = await api.put('/auth/profile', userData);
+    return response.data;
+  }
 };
