@@ -4,7 +4,6 @@ import { debounce } from '../../utils/helpers';
 const SearchBar = ({ onSearch, placeholder = "Search products...", className = "" }) => {
   const [query, setQuery] = useState('');
 
-  // Debounced search function
   const debouncedSearch = debounce((searchQuery) => {
     onSearch(searchQuery);
   }, 300);

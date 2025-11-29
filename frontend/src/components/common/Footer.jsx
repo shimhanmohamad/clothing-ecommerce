@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const Footer = () => {
   return (
@@ -12,7 +12,8 @@ const Footer = () => {
               <span className="text-xl font-bold">FashionStore</span>
             </div>
             <p className="text-gray-400 max-w-md">
-              Your one-stop destination for the latest fashion trends. Quality clothing for men, women, and kids.
+              Your one-stop destination for the latest fashion trends. Quality
+              clothing for men, women, and kids.
             </p>
           </div>
 
@@ -20,10 +21,38 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><a href="/products" className="text-gray-400 hover:text-white transition-colors">All Products</a></li>
-              <li><a href="/products?category=Men" className="text-gray-400 hover:text-white transition-colors">Men's Collection</a></li>
-              <li><a href="/products?category=Women" className="text-gray-400 hover:text-white transition-colors">Women's Collection</a></li>
-              <li><a href="/products?category=Kids" className="text-gray-400 hover:text-white transition-colors">Kids' Collection</a></li>
+              <li>
+                <a
+                  href="/products"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  All Products
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/products?category=Men"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Men's Collection
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/products?category=Women"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Women's Collection
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/products?category=Kids"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Kids' Collection
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -31,17 +60,45 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Shipping Info</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Returns</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Size Guide</a></li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Contact Us
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Shipping Info
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Returns
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  Size Guide
+                </a>
+              </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-gray-400">
-            &copy; 2024 FashionStore. All rights reserved.
+            &copy; {new Date().getFullYear()} FashionStore. All rights reserved.
           </p>
         </div>
       </div>

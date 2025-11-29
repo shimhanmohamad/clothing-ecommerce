@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -23,7 +22,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound"; // Add 404 page
 
-// Hooks
+// Context
 import { useAuth } from "./context/AuthContext";
 
 function App() {

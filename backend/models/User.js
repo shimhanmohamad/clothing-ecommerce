@@ -39,10 +39,9 @@ const userSchema = new mongoose.Schema({
   }]
 }, {
   timestamps: true,
-    optimisticConcurrency: true // This helps with version control
+    optimisticConcurrency: true 
 });
 
-// FIXED: Hash password before saving - removed next parameter
 userSchema.pre('save', async function() {
   if (!this.isModified('password')) return;
   this.password = await bcrypt.hash(this.password, 12);

@@ -1,12 +1,10 @@
 import axios from 'axios';
 
-// In Vite projects env vars should be prefixed with VITE_ and accessed
-// via `import.meta.env.VITE_*`. Provide a safe fallback to localhost.
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 15000, // Increased timeout to 15 seconds
+  timeout: 15000, 
   withCredentials: true,
 });
 

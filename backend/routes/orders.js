@@ -31,7 +31,7 @@ router.post('/', auth, async (req, res) => {
     }
 
     // Ensure all cart products still exist (populated). If any product was removed,
-    // return a clear error instead of throwing when accessing properties.
+    
     const missing = user.cart.filter(item => !item.product);
     if (missing.length > 0) {
       return res.status(400).json({ message: 'Some items in the cart are no longer available', missingCount: missing.length });

@@ -1,4 +1,3 @@
-// services/payment.js
 import api from './api';
 
 export const paymentService = {

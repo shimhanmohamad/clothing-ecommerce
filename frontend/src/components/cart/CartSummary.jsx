@@ -9,8 +9,8 @@ const CartSummary = () => {
   const { isAuthenticated } = useAuth();
 
   const subtotal = getCartTotal();
-  const shipping = subtotal > 0 ? 5.99 : 0; // Fixed shipping cost
-  const tax = subtotal * 0.1; // 10% tax
+  const shipping = subtotal > 0 ? 5.99 : 0; 
+  const tax = subtotal * 0.1;
   const total = subtotal + shipping + tax;
 
   return (
